@@ -18,3 +18,10 @@ Physical-layer signalling over a DC-coupled channel often needs the receiver to 
 ## Edge case to know about
 
 `encode` is strict about element types: only the integers `0` and `1` are accepted. Booleans, the strings `"0"` / `"1"`, and fractional numbers all throw `RangeError`. If your upstream parse produces loose values, normalise them to integers before calling `encode`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
